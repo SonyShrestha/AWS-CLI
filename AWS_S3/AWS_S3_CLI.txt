@@ -1,0 +1,83 @@
+AWS S3 CLI
+AWS s3 CLI commands starts with aws s3 ......
+
+------- Create bucket named bucket_name -------
+	aws s3 mb s3://bucket_name
+
+--> mb stands for make bucket
+
+
+
+
+------- Delete bucket named bucket_name which is empty -------
+	aws s3 rb s3://bucket_name
+
+--> rb stands for remove bucket
+
+
+
+
+------- Delete bucket named bucket_name which is not empty -------
+	aws s3 rb s3://bucket_name --force
+
+--> rb stands for remove bucket
+
+
+
+
+------- List all buckets in AWS S3 -------
+	aws s3 ls
+
+
+
+
+------- Copy file to AWS S3 Bucket named bucket_name -------
+	aws s3 cp file_name.txt s3://bucket_name
+
+
+
+
+
+------- Copy all files in a folder recursively to AWS S3 bucket named bucket_name -------
+	aws s3 cp folder_path s3://bucket_name --recursive
+	aws s3 cp . s3://bucket_name --recursive 
+
+--> . indicates current working directory
+
+
+
+
+
+------- Copy file to AWS S3 bucket and add some permission to it -------
+	aws s3 cp file_name.txt s3://bucket_name --acl public-read
+
+
+
+
+------- Sync files in certain folder to AWS S3 bucket -------
+	aws s3 sync . s3://bucket_name
+
+By using sync we will only add files 
+If we want to delete as well, use commands
+	aws s3 sync . s3://bucket_name --delete
+
+
+To exclude some files wile syncing 
+	aws s3 sync . s3://bucket_name --exclude file_to_exclude.txt
+
+To delete as well as exclude some files while syncing
+	aws s3 sync . s3://bucket_name --delete --exclude file_to_exclude.txt
+
+
+
+
+------- To get conteant in Json format -------
+Use aws s3api to get content in JSON format
+	aws s3api list-objects --bucket bucket_name
+
+
+
+
+------- 
+
+	
