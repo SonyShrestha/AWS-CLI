@@ -1,16 +1,148 @@
 AWS S3 CLI
 AWS s3 CLI commands starts with aws s3 ......
 
+------- List all existing buckets in AWS S3 -------
+	aws s3 ls
+
+
+
+
+------- List all objects in particular bucket -------
+	aws s3 ls s3://<<bucket_name>>
+	aws s3 ls s3://demo_bucket
+
+
+
+
+------- List all objects inside a folder in particular bucket -------
+	aws s3 ls s3://<<bucket_name>>/<<folder_name>>/
+	aws s3 ls s3://demo_bucket/logs/
+	
+	
+	
+	
 ------- Create bucket named bucket_name -------
-	aws s3 mb s3://bucket_name
+	aws s3 mb s3://<<bucket_name>>
+	aws s3 mb s3://demo_bucket
 
 --> mb stands for make bucket
 
 
 
 
-------- Delete bucket named bucket_name which is empty -------
-	aws s3 rb s3://bucket_name
+------- Create bucket named bucket_name in a particular region -------
+	aws s3 mb s3://<<bucket_name>> --region <<region_name>>
+	aws s3 mb s3://demo_bucket --region us-east-1
+	
+--> mb stands for make bucket
+
+
+
+
+------- Copy file from local folder to S3 bucket -------
+	aws s3 cp <<local filename>> s3://<<bucket_name>>/
+	aws s3 cp file_name.txt s3://demo_bucket/
+
+
+
+
+------- Copy all files from local folder to S3 bucket -------
+	aws s3 cp <<local folderpath>> s3://<<bucket_name>> --recursive
+	aws s3 cp . s3://demo_bucket --recursive 
+
+--> . indicates current working directory
+
+
+
+
+------- Add a file to S3 Bucket and a specific storage class -------
+	aws s3 cp <<local filename>> s3://<<bucket_name>>/ --storage-class REDUCED_REDUNDANCY
+	aws s3 cp file_name.txt s3://demo_bucket/ --storage-class REDUCED_REDUNDANCY
+
+
+
+
+------- Copy file to AWS S3 bucket and add some permission to it -------
+	aws s3 cp <<local filename>> s3://<<bucket_name>> --acl public-read
+	aws s3 cp file_name.txt s3://bucket_name --acl public-read
+
+
+
+
+------- Sync local folder with S3 -------
+	aws s3 sync . s3://<<bucket_name>>/path
+	aws s3 sync . s3://demo_bucket/
+	
+	
+	
+
+------- Sync local folder with S3 with deletion -------
+By using sync we will only add files 
+If we want to delete as well, use commands
+	aws s3 sync . s3://<<bucket_name>>/path --delete
+	aws s3 sync . s3://demo_bucket --delete
+
+	
+		
+
+------- Sync S3 Bucket with local folder -------
+	aws s3 sync s3://<<bucket_name>>/path <<local folderpath>>
+	aws s3 sync s3://demo_bucket/ .
+	
+	
+	
+	
+------- Sync S3 Bucket with local folder with deletion -------
+	aws s3 sync s3://<<bucket_name>>/path <<local folderpath>> --deletion
+	aws s3 sync s3://demo_bucket/ . --deletion
+	
+
+
+
+------- Sync local folder excluding a few files -------
+	aws s3 sync . s3://<<bucket_name>> --exclude <<file_to_exclude>>
+	aws s3 sync . s3://demo_bucket --exclude file_to_exclude.txt
+	aws s3 sync . s3://demo_bucket --exclude *.txt
+
+To delete as well as exclude some files while syncing
+	aws s3 sync . s3://<<bucket_name>> --delete --exclude <<file_to_exclude>>
+	aws s3 sync . s3://demo_bucket --delete --exclude file_to_exclude.txt
+
+
+
+
+------- Sync local folder including a few files -------
+	aws s3 sync . s3://<<bucket_name>> --include <<file_to_include>>
+	aws s3 sync . s3://demo_bucket --include file_to_include.txt
+	aws s3 sync . s3://demo_bucket --include *.txt
+
+
+
+
+------- Sync local folder including and excluding few files -------
+	aws s3 sync . s3://<<bucket_name>> --include <<file_to_include>> --exclude <<file_to_exclude>>
+	aws s3 sync . s3://demo_bucket --include *.html --exclude *.css
+	
+	
+	
+
+------- Move files from S3 bucket content to local folder recursively --------
+	aws s3 mv s3://<<bucket_name>>/path <<directory>> --recursive
+	aws s3 mv s3://demo_bucket/ . --recursive
+	
+	
+	
+
+------- Move files from local folder to S3 bucket recursively --------
+	aws s3 mv <<directory>> s3://<<bucket_name>>/path --recursive
+	aws s3 mv . s3://demo_bucket/ --recursive
+	
+	
+	
+	
+------- Remove or Delete bucket which is empty -------
+	aws s3 rb s3://<<bucket_name>>
+	aws s3 rb s3://demo_bucket
 
 --> rb stands for remove bucket
 
@@ -18,66 +150,15 @@ AWS s3 CLI commands starts with aws s3 ......
 
 
 ------- Delete bucket named bucket_name which is not empty -------
-	aws s3 rb s3://bucket_name --force
+	aws s3 rb s3://<<bucket_name>> --force
+	aws s3 rb s3://demo_bucket --force
 
 --> rb stands for remove bucket
 
 
 
 
-------- List all buckets in AWS S3 -------
-	aws s3 ls
-
-
-
-
-------- Copy file to AWS S3 Bucket named bucket_name -------
-	aws s3 cp file_name.txt s3://bucket_name
-
-
-
-
-
-------- Copy all files in a folder recursively to AWS S3 bucket named bucket_name -------
-	aws s3 cp folder_path s3://bucket_name --recursive
-	aws s3 cp . s3://bucket_name --recursive 
-
---> . indicates current working directory
-
-
-
-
-
-------- Copy file to AWS S3 bucket and add some permission to it -------
-	aws s3 cp file_name.txt s3://bucket_name --acl public-read
-
-
-
-
-------- Sync files in certain folder to AWS S3 bucket -------
-	aws s3 sync . s3://bucket_name
-
-By using sync we will only add files 
-If we want to delete as well, use commands
-	aws s3 sync . s3://bucket_name --delete
-
-
-To exclude some files wile syncing 
-	aws s3 sync . s3://bucket_name --exclude file_to_exclude.txt
-
-To delete as well as exclude some files while syncing
-	aws s3 sync . s3://bucket_name --delete --exclude file_to_exclude.txt
-
-
-
-
-------- To get conteant in Json format -------
+------- To get content in Json format -------
 Use aws s3api to get content in JSON format
-	aws s3api list-objects --bucket bucket_name
-
-
-
-
-------- 
-
-	
+	aws s3api list-objects --bucket <<bucket_name>>
+	aws s3api list-objects --bucket demo_bucket
